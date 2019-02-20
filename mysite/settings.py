@@ -148,7 +148,7 @@ CKEDITOR_UPLOAD_PATH = "upload/" # 设定你通过ckeditor所上传的文件的�
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'my_cache_mysql_table',
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR,'cache'),
     }
 }

@@ -11,18 +11,15 @@ def home(request):
 	read_nums, dates = get_days_read_date(blog_content_type)
 
 	# 缓存7天热门博客数据
-	# # week_hot_blogs = cache.get('week_hot_blogs')
-	# if week_hot_blogs is None:
-	# 	week_hot_blogs = get_hot_blogs(7)
-	# 	# cache.set('week_hot_blogs', week_hot_blogs, 3600)
-	# 	print('no cache')
-	# else:
-	# 	print('use cache')
-
+	week_hot_blogs = cache.get('week_hot_blogs')
+	if week_hot_blogs is None:
+		week_hot_blogs = get_hot_blogs(7)
+		cache.set('week_hot_blogs', week_hot_blogs, 3600)
+		
 	context = {}
 	context['read_nums'] = read_nums
 	context['dates'] = dates
 	context['today_hot_data'] = get_today_hot_data()
 	context['yesterday_hot_data'] = get_hot_blogs(1)
-	context['week_hot_blogs'] = get_hot_blogs(7)
+	context['week_hot_blogs'] = week_hot_blogs
 	return render_to_response('home.html', context)
