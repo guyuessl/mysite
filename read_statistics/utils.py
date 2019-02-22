@@ -26,7 +26,7 @@ def read_statistics_once_read(request,obj):
 
 
 #	获取7内所有博客每天的阅读数
-def get_days_read_date(content_type):
+def get_days_read_date():
 	today = timezone.now().date()
 	read_nums = []
 	dates = []

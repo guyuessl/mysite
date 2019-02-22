@@ -1,5 +1,5 @@
 ul.blog-types {
-	list-style-type: none
+	list-style-type: none;
 }
 div.blog:not(:last-child) {
 
@@ -36,4 +36,14 @@ ul.blog-info-describe li {
 
 div.blog-content {
 	text-indent: 2em;
+}
+
+div.comment-area {
+	margin-top: 2em;
+
+}
+
+h3.comment-area-title {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 0.4em;
 }
