@@ -4,7 +4,8 @@ from read_statistics.utils import get_days_read_date, get_today_hot_data, get_ho
 from django.core.cache import cache
 from django.contrib import auth
 from django.urls import reverse
-from .form import LoginForm
+from django.contrib.auth.models import User
+from .form import LoginForm, RegForm
 
 
 def home(request):
@@ -39,4 +40,26 @@ def login(request):
 	context['login_form'] = login_form
 	return render(request, 'login.html', context)	
 
+
+def register(request):
+	if request.method == 'POST':
+		reg_form = RegForm(request.POST)
+		if reg_form.is_valid():
+			username = reg_form.cleaned_data['username']
+			password = reg_form.cleaned_data['password']
+			email = reg_form.cleaned_data['email']
+			# 创建用户的方法
+			user = User.objects.create_user(username, email, password)
+			user.save()
+			# 登录用户
+			user = auth.authenticate(username=username, password=password)
+			auth.login(request, user)
+			return redirect(request.GET.get('from', reverse('home')))
+
+	else:
+		reg_form = RegForm()
+
+	context = {}
+	context['reg_form'] = reg_form
+	return render(request, 'register.html', context)	
 	    	
