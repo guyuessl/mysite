@@ -1,12 +1,9 @@
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import Paginator
-from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.db.models import Count
 from read_statistics.utils import read_statistics_once_read
 from .models import Blog, BlogType
-from comment.models import Comment
-from comment.forms import CommentForm
 
 
 #   博客列表页数据处理
@@ -20,15 +17,11 @@ def blog_list(request):
 def blog_detail(request, blog_pk):
     blog = get_object_or_404(Blog, pk=blog_pk)
     read_cookie_key = read_statistics_once_read(request, blog)
-    blog_content_type = ContentType.objects.get_for_model(blog)
-    comments = Comment.objects.filter(content_type = blog_content_type, object_id=blog.pk)
 
     context = {}
     context['previous_blog'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['next_blog'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['blog'] = blog
-    context['comments'] = comments
-    context['comment_form'] = CommentForm(initial={'content_type':  blog_content_type.model, 'object_id': blog_pk})
     response = render(request, 'blog/blog_detail.html', context)
     response.set_cookie(read_cookie_key, 'true', max_age=15) # 阅读cookie标记 第三个参数是控制过期时间，不加就是关闭浏览器就算是过期
     return response
@@ -48,6 +41,7 @@ def blogs_with_date(request, year, month):
     context = get_blog_list_common_data(request, blogs_all_list)
     context['blog_with_date'] = "%s年%s月" % (year,month)
     return render(request, 'blog/blogs_with_date.html', context)
+
 
 #   合并重复使用的数据
 def get_blog_list_common_data(request, blogs_all_list):

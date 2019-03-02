@@ -6,29 +6,33 @@
     <link rel="stylesheet" type="text/css" href="{% static 'blog/blog.css' %}">
 {% endblock %}
 
+{% load comment_tags %}
+
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-10">
                 <div class="panel panel-default">
                     <div class="panel-heading">{% block blog_list_title %}博客列表{% endblock %}</div>
-                    <div class="panel-body">
+                    <div class="panel-body">                        
                         {% for blog in blogs %}
-                        <div class="blog">
-                            <h3><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h3>
-                            <p class="blog-info">
-                                <span class="glyphicon glyphicon glyphicon-tag"></span>
-                                <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type }}</a>&nbsp&nbsp
-                                <span class="glyphicon glyphicon glyphicon-time"></span>
-                                {{ blog.created_time|date:"Y-m-d" }}&nbsp&nbsp
-                                阅读({{ blog.get_read_num }})
-                            </p>
-                            <p>{{ blog.content|striptags|truncatechars_html:120 }}</p>
-                        </div>
-                        {% empty %}
-                        <div class="blog">
-                            <h3>--- 暂无博客，敬请期待！---</h3>
-                        </div>
+                            {% get_blog_read_num blog as read_num %}
+                            <div class="blog">
+                                <h3><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h3>
+                                <p class="blog-info">
+                                    <span class="glyphicon glyphicon glyphicon-tag"></span>
+                                    <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type }}</a>&nbsp&nbsp
+                                    <span class="glyphicon glyphicon glyphicon-time"></span>
+                                    <span>{{ blog.created_time|date:"Y-m-d" }}</span>&nbsp&nbsp
+                                    <span>阅读({{ read_num }})</span>&nbsp&nbsp
+                                    <span>评论({% get_comment_count blog %})</span>
+                                </p>
+                                <p>{{ blog.content|striptags|truncatechars_html:120 }}</p>
+                            </div>
+                            {% empty %}
+                            <div class="blog">
+                                <h3>--- 暂无博客，敬请期待！---</h3>
+                            </div>
                         {% endfor %}                       
                     </div>
                 </div>
@@ -66,9 +70,9 @@
                         </li>
                     </ul> 
                     <p>
-                        共有{{ page_of_blogs.paginator.count }}篇博客，
-                        当前第{{ page_of_blogs.number }}页，
-                        共 {{ page_of_blogs.paginator.num_pages }}页
+                        <span>共有{{ page_of_blogs.paginator.count }}篇博客，</span>
+                        <span>当前第{{ page_of_blogs.number }}页，</span>
+                        <span>共 {{ page_of_blogs.paginator.num_pages }}页</span>
                     </p>
                 </div>
             </div>

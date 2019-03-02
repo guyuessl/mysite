@@ -36,6 +36,7 @@ ul.blog-info-describe li {
 
 div.blog-content {
 	text-indent: 2em;
+	margin-bottom: 2em;
 }
 
 div.comment-area {
@@ -50,4 +51,38 @@ h3.comment-area-title {
 
 div.django-ckeditor-widget {
 	width: 100%;
+}
+
+div.comment {
+	border-bottom: 1px dashed #ccc;
+	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+div.reply {
+	margin-left: 2em;
+
+}
+
+div#reply_content_container {
+	border: 1px solid #d1d1d1;
+    background-color: #f8f8f8;
+    border-bottom: none;
+    overflow: hidden;
+    padding: 1em 1em 0.5em;
+}
+
+p#reply_title {
+	border-bottom: 1px dashed #ccc;
+	padding-bottom: 0.5em;
+}
+div.like {
+	color: #337ab7;
+	cursor: pointer;
+	display: inline-block;
+	padding: 0.5em 0.3em; 
+}
+
+div.like .active {
+	color: #f22;
 }
